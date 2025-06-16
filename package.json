@@ -8,7 +8,8 @@
     "dev": "concurrently \"pnpm run dev:shared\" \"pnpm run dev:frontend\"",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean && rm -rf node_modules",
+    "vercel-build": "turbo run build"
   },
   "devDependencies": {
     "@types/node": "^20",
