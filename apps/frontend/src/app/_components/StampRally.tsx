@@ -2,55 +2,70 @@
 
 import { useStampRally } from '@line-demo/shared/contexts/StampRallyContext';
 import { QRScanner } from './QRScanner';
+import { Container, Title, Text, SimpleGrid, Card, Button, Group, Stack } from '@mantine/core';
 
 export const StampRally = () => {
   const { stamps, collectedCount, isCompleted, resetStamps } = useStampRally();
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold mb-2">スタンプラリー</h1>
-        <p className="text-gray-600">
+    <Container size="md" py="xl">
+      <Stack align="center" gap="md" mb="xl">
+        <Title order={1}>スタンプラリー</Title>
+        <Text c="dimmed" size="lg">
           獲得スタンプ: {collectedCount}/8
-        </p>
-      </div>
+        </Text>
+      </Stack>
 
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <SimpleGrid
+        cols={{ base: 2, sm: 3, md: 4 }}
+        spacing="md"
+        mb="xl"
+      >
         {stamps.map((stamp) => (
-          <div
+          <Card
             key={stamp.id}
-            className={`aspect-square rounded-lg border-2 p-4 flex flex-col items-center justify-center
-              ${stamp.isCollected
-                ? 'bg-green-100 border-green-500'
-                : 'bg-gray-50 border-gray-200'
-              }`}
+            padding="md"
+            radius="md"
+            withBorder
+            bg={stamp.isCollected ? 'var(--mantine-color-green-0)' : 'var(--mantine-color-gray-0)'}
+            style={{ aspectRatio: '1' }}
           >
-            <div className="text-lg font-bold mb-2">{stamp.name}</div>
-            <div className="text-sm text-gray-600">{stamp.location}</div>
-            {stamp.isCollected && (
-              <div className="mt-2 text-green-600">
-                ✓ 獲得済み
-              </div>
-            )}
-          </div>
+            <Stack align="center" justify="center" h="100%">
+              <Text fw={700} size="lg" ta="center">
+                {stamp.name}
+              </Text>
+              <Text size="sm" c="dimmed" ta="center">
+                {stamp.location}
+              </Text>
+              {stamp.isCollected && (
+                <Text c="green" fw={500}>
+                  ✓ 獲得済み
+                </Text>
+              )}
+            </Stack>
+          </Card>
         ))}
-      </div>
+      </SimpleGrid>
 
       <QRScanner />
 
       {isCompleted && (
-        <div className="mt-8 text-center">
-          <div className="bg-green-100 text-green-800 p-4 rounded-lg mb-4">
-            おめでとうございます！全てのスタンプを集めました！
-          </div>
-          <button
+        <Stack align="center" mt="xl" gap="md">
+          <Card bg="var(--mantine-color-green-0)" radius="md" p="md">
+            <Text c="green.8" ta="center" fw={500}>
+              おめでとうございます！全てのスタンプを集めました！
+            </Text>
+          </Card>
+          <Button
+            variant="light"
+            color="gray"
             onClick={resetStamps}
-            className="bg-gray-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-600"
+            size="md"
           >
             リセット
-          </button>
-        </div>
+          </Button>
+        </Stack>
       )}
-    </div>
+    </Container>
   );
 }; 

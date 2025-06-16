@@ -3,6 +3,8 @@ import "./globals.css";
 import { AuthProvider } from "@line-demo/shared/contexts/AuthContext";
 import { StampRallyProvider } from "@line-demo/shared/contexts/StampRallyContext";
 import { LiffProvider } from "./_components/LiffProvider";
+import '@mantine/core/styles.css';
+import { MantineProvider } from '@mantine/core';
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -22,13 +24,15 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-        <LiffProvider>
-          <AuthProvider>
-            <StampRallyProvider>
-              {children}
-            </StampRallyProvider>
-          </AuthProvider>
-        </LiffProvider>
+        <MantineProvider>
+          <LiffProvider>
+            <AuthProvider>
+              <StampRallyProvider>
+                {children}
+              </StampRallyProvider>
+            </AuthProvider>
+          </LiffProvider>
+        </MantineProvider>
       </body>
     </html>
   );
