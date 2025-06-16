@@ -2,55 +2,63 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useGlobalContext } from '../hooks/useGlobalContext';
-import type { Liff } from '@line/liff';
+
+interface Profile {
+  userId: string;
+  displayName: string;
+  pictureUrl?: string;
+  statusMessage?: string;
+}
 
 interface AuthContextType {
   isLoggedIn: boolean;
-  profile: {
-    userId: string;
-    displayName: string;
-    pictureUrl?: string;
-  } | null;
+  profile: Profile | null;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { liff } = useGlobalContext();
-  const [profile, setProfile] = useState<AuthContextType['profile']>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
-    if (liff?.isLoggedIn()) {
-      liff.getProfile()
-        .then((profile) => {
-          setProfile({
-            userId: profile.userId,
-            displayName: profile.displayName,
-            pictureUrl: profile.pictureUrl,
-          });
-        })
-        .catch((error: Error) => {
+    if (!liff) return;
+
+    const checkLogin = async () => {
+      const loggedIn = liff.isLoggedIn();
+      setIsLoggedIn(loggedIn);
+
+      if (loggedIn) {
+        try {
+          const userProfile = await liff.getProfile();
+          setProfile(userProfile);
+        } catch (error) {
           console.error('Failed to get profile:', error);
-        });
-    }
+          setProfile(null);
+        }
+      }
+    };
+
+    checkLogin();
   }, [liff]);
 
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: liff?.isLoggedIn() ?? false,
+        isLoggedIn,
         profile,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-} 
+}; 

@@ -18,40 +18,45 @@ var useGlobalContext = () => {
 // src/contexts/AuthContext.tsx
 import { jsx } from "react/jsx-runtime";
 var AuthContext = createContext2(null);
-function AuthProvider({ children }) {
+var AuthProvider = ({ children }) => {
   const { liff } = useGlobalContext();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profile, setProfile] = useState(null);
   useEffect(() => {
-    if (liff == null ? void 0 : liff.isLoggedIn()) {
-      liff.getProfile().then((profile2) => {
-        setProfile({
-          userId: profile2.userId,
-          displayName: profile2.displayName,
-          pictureUrl: profile2.pictureUrl
-        });
-      }).catch((error) => {
-        console.error("Failed to get profile:", error);
-      });
-    }
+    if (!liff) return;
+    const checkLogin = async () => {
+      const loggedIn = liff.isLoggedIn();
+      setIsLoggedIn(loggedIn);
+      if (loggedIn) {
+        try {
+          const userProfile = await liff.getProfile();
+          setProfile(userProfile);
+        } catch (error) {
+          console.error("Failed to get profile:", error);
+          setProfile(null);
+        }
+      }
+    };
+    checkLogin();
   }, [liff]);
   return /* @__PURE__ */ jsx(
     AuthContext.Provider,
     {
       value: {
-        isLoggedIn: (liff == null ? void 0 : liff.isLoggedIn()) ?? false,
+        isLoggedIn,
         profile
       },
       children
     }
   );
-}
-function useAuth() {
+};
+var useAuth = () => {
   const context = useContext2(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
+};
 
 // src/contexts/StampRallyContext.tsx
 import { createContext as createContext3, useContext as useContext3, useState as useState2, useEffect as useEffect2 } from "react";
