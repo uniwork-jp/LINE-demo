@@ -1,7 +1,7 @@
 'use client';
 
-import { useGlobalContext } from '@/hooks/useGlobalContext';
-import { useStampRally } from '@/contexts/StampRallyContext';
+import { useGlobalContext } from '@line-demo/shared/hooks/useGlobalContext';
+import { useStampRally } from '@line-demo/shared/contexts/StampRallyContext';
 import { useState, useCallback } from 'react';
 
 export const QRScanner = () => {

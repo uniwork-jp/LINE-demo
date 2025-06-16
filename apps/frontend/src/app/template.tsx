@@ -1,36 +1,18 @@
 "use client";
 
-import { GlobalContext } from "@/contexts/GlobalContext";
-import { Liff } from "@line/liff";
-import { useCallback, useEffect, useState } from "react";
+import { AuthProvider } from "@line-demo/shared/contexts/AuthContext";
+import { StampRallyProvider } from "@line-demo/shared/contexts/StampRallyContext";
 
-export default function Template({ children }: { children: React.ReactNode }) {
-  const [liffObject, setLiffObject] = useState<Liff | null>(null);
-  const [liffError, setLiffError] = useState<string | null>(null);
-
-  // Execute liff.init() when the app is initialized
-  useEffect(() => {
-    // to avoid `window is not defined` error
-    import("@line/liff")
-      .then((liff) => liff.default)
-      .then((liff) => {
-        console.log("LIFF init...");
-        liff
-          .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID! })
-          .then(() => {
-            console.log("LIFF init succeeded.");
-            setLiffObject(liff);
-          })
-          .catch((error: Error) => {
-            console.log("LIFF init failed.");
-            setLiffError(error.toString());
-          });
-      });
-  }, []);
-
+export default function Template({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <GlobalContext.Provider value={{ liff: liffObject, liffError: liffError }}>
-      <div>{children}</div>
-    </GlobalContext.Provider>
+    <AuthProvider>
+      <StampRallyProvider>
+        {children}
+      </StampRallyProvider>
+    </AuthProvider>
   );
 }

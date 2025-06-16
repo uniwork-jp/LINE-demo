@@ -1,6 +1,7 @@
 'use client';
 
-import { useStampRally } from '@/contexts/StampRallyContext';
+import { useGlobalContext } from '@line-demo/shared/hooks/useGlobalContext';
+import { useStampRally } from '@line-demo/shared/contexts/StampRallyContext';
 import { QRScanner } from './QRScanner';
 
 export const StampRally = () => {
