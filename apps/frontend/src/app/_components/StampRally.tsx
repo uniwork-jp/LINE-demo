@@ -1,6 +1,5 @@
 'use client';
 
-import { useGlobalContext } from '@line-demo/shared/hooks/useGlobalContext';
 import { useStampRally } from '@line-demo/shared/contexts/StampRallyContext';
 import { QRScanner } from './QRScanner';
 

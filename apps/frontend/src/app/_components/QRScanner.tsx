@@ -6,51 +6,36 @@ import { useState, useCallback } from 'react';
 
 export const QRScanner = () => {
   const { liff } = useGlobalContext();
-  const { collectStamp } = useStampRally();
-  const [isScanning, setIsScanning] = useState(false);
+  const { checkStamp } = useStampRally();
+  const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const startScan = useCallback(async () => {
-    if (!liff) {
-      setError('LIFFが初期化されていません');
-      return;
-    }
+  const handleScan = useCallback(async () => {
+    if (!liff) return;
 
     try {
-      setIsScanning(true);
+      setScanning(true);
       setError(null);
-
-      // LIFFのカメラAPIを使用してQRコードをスキャン
       const result = await liff.scanCodeV2();
-      
       if (result.value) {
-        try {
-          // QRコードの値からスタンプIDを取得
-          const stampId = parseInt(result.value, 10);
-          if (!isNaN(stampId) && stampId >= 1 && stampId <= 8) {
-            collectStamp(stampId);
-          } else {
-            setError('無効なQRコードです');
-          }
-        } catch (e) {
-          setError('QRコードの読み取りに失敗しました');
-        }
+        await checkStamp(result.value);
       }
-    } catch (e) {
-      setError('カメラの起動に失敗しました');
+    } catch (_error) {
+      setError('QRコードのスキャンに失敗しました');
+      console.error('Scan error:', _error);
     } finally {
-      setIsScanning(false);
+      setScanning(false);
     }
-  }, [liff, collectStamp]);
+  }, [liff, checkStamp]);
 
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       <button
-        onClick={startScan}
-        disabled={isScanning || !liff}
+        onClick={handleScan}
+        disabled={scanning || !liff}
         className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium disabled:bg-gray-400"
       >
-        {isScanning ? 'スキャン中...' : 'QRコードをスキャン'}
+        {scanning ? 'スキャン中...' : 'QRコードをスキャン'}
       </button>
       {error && (
         <div className="text-red-500 text-sm">{error}</div>

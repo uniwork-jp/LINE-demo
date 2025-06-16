@@ -94,6 +94,13 @@ function StampRallyProvider({ children }) {
       )
     );
   };
+  const checkStamp = async (stampId) => {
+    const id = parseInt(stampId, 10);
+    if (isNaN(id) || id < 1 || id > stamps.length) {
+      throw new Error("\u7121\u52B9\u306A\u30B9\u30BF\u30F3\u30D7ID\u3067\u3059");
+    }
+    collectStamp(id);
+  };
   const resetStamps = () => {
     setStamps(INITIAL_STAMPS);
   };
@@ -105,6 +112,7 @@ function StampRallyProvider({ children }) {
         collectedCount,
         isCompleted,
         collectStamp,
+        checkStamp,
         resetStamps
       },
       children

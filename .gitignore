@@ -42,3 +42,4 @@ next-env.d.ts
 /apps/frontend/.next
 /apps/frontend/node_modules
 /packages/shared/node_modules
+/.turbo

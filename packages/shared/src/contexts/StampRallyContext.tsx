@@ -15,6 +15,7 @@ interface StampRallyContextType {
   collectedCount: number;
   isCompleted: boolean;
   collectStamp: (stampId: number) => void;
+  checkStamp: (stampId: string) => Promise<void>;
   resetStamps: () => void;
 }
 
@@ -61,6 +62,14 @@ export function StampRallyProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const checkStamp = async (stampId: string) => {
+    const id = parseInt(stampId, 10);
+    if (isNaN(id) || id < 1 || id > stamps.length) {
+      throw new Error('無効なスタンプIDです');
+    }
+    collectStamp(id);
+  };
+
   const resetStamps = () => {
     setStamps(INITIAL_STAMPS);
   };
@@ -72,6 +81,7 @@ export function StampRallyProvider({ children }: { children: ReactNode }) {
         collectedCount,
         isCompleted,
         collectStamp,
+        checkStamp,
         resetStamps,
       }}
     >
