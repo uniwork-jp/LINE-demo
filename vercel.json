@@ -6,8 +6,14 @@
   "outputDirectory": "apps/frontend/.next",
   "builds": [
     {
-      "src": "apps/frontend/package.json",
+      "src": "apps/frontend/next.config.mjs",
       "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/apps/frontend/$1"
     }
   ]
 } 
