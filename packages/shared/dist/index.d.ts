@@ -36,6 +36,7 @@ interface StampRallyContextType {
     collectedCount: number;
     isCompleted: boolean;
     collectStamp: (stampId: number) => void;
+    checkStamp: (stampId: string) => Promise<void>;
     resetStamps: () => void;
 }
 declare function StampRallyProvider({ children }: {
