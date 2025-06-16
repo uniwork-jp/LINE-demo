@@ -9,18 +9,20 @@ interface GlobalContextType {
 }
 declare const GlobalContext: react.Context<GlobalContextType | null>;
 
+interface Profile {
+    userId: string;
+    displayName: string;
+    pictureUrl?: string;
+    statusMessage?: string;
+}
 interface AuthContextType {
     isLoggedIn: boolean;
-    profile: {
-        userId: string;
-        displayName: string;
-        pictureUrl?: string;
-    } | null;
+    profile: Profile | null;
 }
-declare function AuthProvider({ children }: {
+declare const AuthProvider: ({ children }: {
     children: ReactNode;
-}): react_jsx_runtime.JSX.Element;
-declare function useAuth(): AuthContextType;
+}) => react_jsx_runtime.JSX.Element;
+declare const useAuth: () => AuthContextType;
 
 interface Stamp {
     id: number;

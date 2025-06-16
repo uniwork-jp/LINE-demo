@@ -49,40 +49,45 @@ var useGlobalContext = () => {
 // src/contexts/AuthContext.tsx
 var import_jsx_runtime = require("react/jsx-runtime");
 var AuthContext = (0, import_react3.createContext)(null);
-function AuthProvider({ children }) {
+var AuthProvider = ({ children }) => {
   const { liff } = useGlobalContext();
+  const [isLoggedIn, setIsLoggedIn] = (0, import_react3.useState)(false);
   const [profile, setProfile] = (0, import_react3.useState)(null);
   (0, import_react3.useEffect)(() => {
-    if (liff == null ? void 0 : liff.isLoggedIn()) {
-      liff.getProfile().then((profile2) => {
-        setProfile({
-          userId: profile2.userId,
-          displayName: profile2.displayName,
-          pictureUrl: profile2.pictureUrl
-        });
-      }).catch((error) => {
-        console.error("Failed to get profile:", error);
-      });
-    }
+    if (!liff) return;
+    const checkLogin = async () => {
+      const loggedIn = liff.isLoggedIn();
+      setIsLoggedIn(loggedIn);
+      if (loggedIn) {
+        try {
+          const userProfile = await liff.getProfile();
+          setProfile(userProfile);
+        } catch (error) {
+          console.error("Failed to get profile:", error);
+          setProfile(null);
+        }
+      }
+    };
+    checkLogin();
   }, [liff]);
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     AuthContext.Provider,
     {
       value: {
-        isLoggedIn: (liff == null ? void 0 : liff.isLoggedIn()) ?? false,
+        isLoggedIn,
         profile
       },
       children
     }
   );
-}
-function useAuth() {
+};
+var useAuth = () => {
   const context = (0, import_react3.useContext)(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
+};
 
 // src/contexts/StampRallyContext.tsx
 var import_react4 = require("react");

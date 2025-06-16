@@ -9,13 +9,15 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint src/",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "@line/liff": "^2.26.1",
     "react": "^19.0.0"
   },
   "devDependencies": {
     "@types/react": "^19",
+    "eslint": "^9",
     "tsup": "^8.0.2",
     "typescript": "^5"
   }
