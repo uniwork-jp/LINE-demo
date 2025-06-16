@@ -1,13 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm -w run vercel-build",
+  "buildCommand": "pnpm -w run build",
   "installCommand": "pnpm install",
   "framework": "nextjs",
   "outputDirectory": "apps/frontend/.next",
   "builds": [
     {
       "src": "apps/frontend/next.config.mjs",
-      "use": "@vercel/next"
+      "use": "@vercel/next",
+      "config": {
+        "buildCommand": "pnpm -w run build",
+        "outputDirectory": "apps/frontend/.next"
+      }
     }
   ],
   "routes": [
