@@ -81,6 +81,9 @@ importers:
 
   packages/shared:
     dependencies:
+      '@line/liff':
+        specifier: ^2.26.1
+        version: 2.26.1
       react:
         specifier: ^19.0.0
         version: 19.1.0
@@ -88,6 +91,9 @@ importers:
       '@types/react':
         specifier: ^19
         version: 19.1.8
+      eslint:
+        specifier: ^9
+        version: 9.29.0
       tsup:
         specifier: ^8.0.2
         version: 8.5.0(typescript@5.8.3)
