@@ -1,6 +1,6 @@
 "use client";
 
-import { useGlobalContext } from "@/hooks/useGlobalContext";
+import { useGlobalContext } from "@line-demo/shared/hooks/useGlobalContext";
 import { FC } from "react";
 
 export const Liff:FC = () => {
